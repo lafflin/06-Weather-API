@@ -15,6 +15,7 @@ const citySearchEl = $(
 );
 searchEl.append(citySearchEl);
 
+// this needs to be fixed, currently works as far as setting the city to the entered city, but won't add it to the API call
 $("#searchButton").click(function () {
 	console.log($("#searchInput"));
 	city = $("#searchInput").val();
