@@ -1,0 +1,20 @@
+.green {
+	background-color: green;
+}
+
+.yellow {
+	background-color: yellow;
+}
+
+.red {
+	background-color: red;
+}
+
+* {
+	background-color: rgb(65, 65, 65);
+	color: white;
+}
+
+#wIcon {
+	max-width: 10%;
+}

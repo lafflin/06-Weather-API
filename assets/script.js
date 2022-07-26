@@ -10,14 +10,16 @@ const dayThreeEl = $("#dayThree");
 const dayFourEl = $("#dayFour");
 const dayFiveEl = $("#dayFive");
 fiveDayEl.append(dayOneEl, dayTwoEl, dayThreeEl, dayFourEl, dayFiveEl);
+fiveDayEl.hide();
 // weather display DOM elements
-const cityNameEl = $("<h1>");
-const dateEl = $("<h4>");
-const wIconEl = $("<img id='wIcon'>");
-const currentTempEl = $("<h2>");
-const humidityEl = $("<h3>");
-const windSpeedEl = $("<h3>");
-const uvEl = $("<h3>");
+const cityNameEl = $("<h1 class='order-2 col-2'>");
+const dateEl = $("<h4 class='order-3 col-2'>");
+const wIconEl = $("<img id='wIcon' class='order-1 col-4'>");
+const currentTempEl = $("<h2 class='order-3 col-4'>");
+const humidityEl = $("<h3 class='order-4 col-4'>");
+const windSpeedEl = $("<h3 class='order-5 col-4'>");
+const uvEl = $("<h3 class='order-5 col-4'>");
+let uv = "";
 mainWeatherEl.append(
 	cityNameEl,
 	dateEl,
@@ -27,6 +29,7 @@ mainWeatherEl.append(
 	windSpeedEl,
 	uvEl
 );
+mainWeatherEl.hide();
 // 5-day forecast DOM elements
 // day 1/5
 const date1 = $("<h3>");
@@ -48,39 +51,45 @@ const icon3 = $("<img>");
 const temp3 = $("<h3>");
 const windspeed3 = $("<h3>");
 const humidity3 = $("<h3>");
-dayTwoEl.append(date3, icon3, temp3, windspeed3, humidity3);
+dayThreeEl.append(date3, icon3, temp3, windspeed3, humidity3);
 // day 4/5
 const date4 = $("<h3>");
 const icon4 = $("<img>");
 const temp4 = $("<h3>");
 const windspeed4 = $("<h3>");
 const humidity4 = $("<h3>");
-dayTwoEl.append(date4, icon4, temp4, windspeed4, humidity4);
+dayFourEl.append(date4, icon4, temp4, windspeed4, humidity4);
 // day 5/5
 const date5 = $("<h3>");
 const icon5 = $("<img>");
 const temp5 = $("<h3>");
 const windspeed5 = $("<h3>");
 const humidity5 = $("<h3>");
-dayTwoEl.append(date5, icon5, temp5, windspeed5, humidity5);
+dayFiveEl.append(date5, icon5, temp5, windspeed5, humidity5);
 
 // api stuff
 const apiKey = "d586f9f8d444d305ec48c97bc8680507";
 var city = "";
 // elements for the search bar and submit buttons
 const citySearchEl = $(
-	"<input type='text' id='searchInput'> <input type='submit' value='Get Weather' id='searchButton'>"
+	"<input type='text' id='searchInput' placeholder='enter city name'> <input type='submit' value='Get Weather' id='searchButton'>"
 );
 searchEl.append(citySearchEl);
 // inside of this function need to eventually store each individual successful search into local storage to be displayed for search history
 $("#searchButton").click(function () {
-	console.log($("#searchInput"));
 	currentCity = $("#searchInput").val();
-	console.log(currentCity);
 	city = currentCity;
-	console.log(city);
 	getWeather();
+	mainWeatherEl.show();
 });
+// uv.val() is not a function???????????????
+// function uvColor() {
+// 	// JSON.parse(uv);
+// 	console.log(uv);
+// 	if (uv.val() <= 2) {
+// 		uvEl.addClass("green");
+// 	}
+// }
 // more api stuff
 function getWeather() {
 	var queryURL =
@@ -115,7 +124,9 @@ function getWeather() {
 				.then((data) => {
 					let secondData = data;
 					console.log(secondData);
+					uv = secondData.current.uvi;
 					uvEl.text("UV Index: " + secondData.current.uvi);
+					// uvColor();
 					humidityEl.text("Humidity: " + secondData.current.humidity);
 					windSpeedEl.text("Wind Speed: " + secondData.current.wind_speed);
 				});
@@ -132,6 +143,7 @@ function getWeather() {
 					let forecastData = data;
 					console.log(forecastData);
 					// day 1/5
+					fiveDayEl.show();
 					let milliseconds1 = forecastData.list[4].dt * 1000;
 					let dateObj1 = new Date(milliseconds1);
 					const dateA = dateObj1.toLocaleString();
