@@ -33,6 +33,7 @@ mainWeatherEl.append(
 const historyEl = $("#history");
 const historyListEl = $("<ul>");
 historyEl.append(historyListEl);
+// hiding these things before so that there is not any weird stuff on the page before entering a city
 mainWeatherEl.hide();
 historyEl.hide();
 // 5-day forecast DOM elements
@@ -81,7 +82,7 @@ const citySearchEl = $(
 );
 let cityHistory = [];
 searchEl.append(citySearchEl);
-// inside of this function need to eventually store each individual successful search into local storage to be displayed for search history
+// sets the city, searches it, adds it to the local storage for search history
 $("#searchButton").click(function () {
 	currentCity = $("#searchInput").val();
 	cityHistory.push(currentCity);
@@ -92,10 +93,11 @@ $("#searchButton").click(function () {
 	historyEl.show();
 });
 
+// displays history for the last few cities entered. one weird quirk is that it only remembers things from your last visit. ie- if you reload the page you're history will only contain what you looked up on the last session
 function historyDisplay() {
 	let forHistory = JSON.parse(localStorage.getItem("Cities"));
 	console.log(forHistory);
-	for (i = 0; i <= 5; i++) {
+	for (i = 0; i <= 3; i++) {
 		const itemEl = $("<li>");
 		itemEl.text(forHistory[i]);
 		historyListEl.append(itemEl);
@@ -103,6 +105,7 @@ function historyDisplay() {
 }
 
 historyDisplay();
+// function to change the uv background color
 function uvColor() {
 	console.log(uv);
 	if (uv <= 2) {
@@ -117,7 +120,8 @@ function uvColor() {
 	}
 }
 
-// more api stuff
+// all api call and data grabbing to display everything pertaining to the weather
+// most of the current weather stuff is grabbed in this first call.
 function getWeather() {
 	var queryURL =
 		"https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -139,6 +143,7 @@ function getWeather() {
 			currentTempEl.text("Temp: " + weather.main.temp);
 			let lat = weather.coord.lat;
 			let lon = weather.coord.lon;
+			// this second fetch is because in the first one the uv was not displayed. then i added the wind speed and humidity as well because they seemed closer to accurate in this call rather than the prior one.
 			fetch(
 				"https://api.openweathermap.org/data/2.5/onecall?lat=" +
 					lat +
@@ -157,6 +162,7 @@ function getWeather() {
 					humidityEl.text("Humidity: " + secondData.current.humidity);
 					windSpeedEl.text("Wind Speed: " + secondData.current.wind_speed);
 				});
+			// the following is all of the forecast data, extremely WET code, a lot of repeating myself. looking back i think i could have maybe thrown it into a for loop to generate all of the forecast stuff in like 1/5 of the code
 			return fetch(
 				"https://api.openweathermap.org/data/2.5/forecast?lat=" +
 					lat +
@@ -238,5 +244,3 @@ function getWeather() {
 				});
 		});
 }
-
-// when viewing the uv index there should be a color indicator of the condition; favorable(green), moderate(yellow), or severe(red)
