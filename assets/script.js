@@ -21,18 +21,18 @@ $("#searchButton").click(function () {
 	console.log($("#searchInput"));
 	currentCity = $("#searchInput").val();
 	console.log(currentCity);
-	city = JSON.stringify(currentCity);
+	city = currentCity;
 	console.log(city);
 	getWeather();
 });
 
 // more api stuff
-var queryURL =
-	"https://api.openweathermap.org/data/2.5/weather?q=" +
-	city +
-	"&appid=" +
-	apiKey;
 function getWeather() {
+	var queryURL =
+		"https://api.openweathermap.org/data/2.5/weather?q=" +
+		city +
+		"&appid=" +
+		apiKey;
 	fetch(queryURL)
 		.then((res) => res.json())
 		.then((data) => {
