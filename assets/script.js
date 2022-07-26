@@ -29,7 +29,12 @@ mainWeatherEl.append(
 	windSpeedEl,
 	uvEl
 );
+// history DOM elements
+const historyEl = $("#history");
+const historyListEl = $("<ul>");
+historyEl.append(historyListEl);
 mainWeatherEl.hide();
+historyEl.hide();
 // 5-day forecast DOM elements
 // day 1/5
 const date1 = $("<h3>");
@@ -74,14 +79,30 @@ var city = "";
 const citySearchEl = $(
 	"<input type='text' id='searchInput' placeholder='enter city name'> <input type='submit' value='Get Weather' id='searchButton'>"
 );
+let cityHistory = [];
 searchEl.append(citySearchEl);
 // inside of this function need to eventually store each individual successful search into local storage to be displayed for search history
 $("#searchButton").click(function () {
 	currentCity = $("#searchInput").val();
+	cityHistory.push(currentCity);
+	localStorage.setItem("Cities", JSON.stringify(cityHistory));
 	city = currentCity;
 	getWeather();
 	mainWeatherEl.show();
+	historyEl.show();
 });
+
+function historyDisplay() {
+	let forHistory = JSON.parse(localStorage.getItem("Cities"));
+	console.log(forHistory);
+	for (i = 0; i <= 5; i++) {
+		const itemEl = $("<li>");
+		itemEl.text(forHistory[i]);
+		historyListEl.append(itemEl);
+	}
+}
+
+historyDisplay();
 function uvColor() {
 	console.log(uv);
 	if (uv <= 2) {

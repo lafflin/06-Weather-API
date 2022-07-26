@@ -21,3 +21,7 @@
 #wIcon {
 	max-width: 10%;
 }
+
+ul {
+	list-style-type: none;
+}
