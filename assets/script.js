@@ -82,14 +82,20 @@ $("#searchButton").click(function () {
 	getWeather();
 	mainWeatherEl.show();
 });
-// uv.val() is not a function???????????????
-// function uvColor() {
-// 	// JSON.parse(uv);
-// 	console.log(uv);
-// 	if (uv.val() <= 2) {
-// 		uvEl.addClass("green");
-// 	}
-// }
+function uvColor() {
+	console.log(uv);
+	if (uv <= 2) {
+		uvEl.addClass("green");
+		uvEl.addClass("black-text");
+	} else if (uv <= 7 && uv > 2) {
+		uvEl.addClass("yellow");
+		uvEl.addClass("black-text");
+	} else if (uv > 7) {
+		uvEl.addClass("red");
+		uvEl.addClass("black-text");
+	}
+}
+
 // more api stuff
 function getWeather() {
 	var queryURL =
@@ -126,7 +132,7 @@ function getWeather() {
 					console.log(secondData);
 					uv = secondData.current.uvi;
 					uvEl.text("UV Index: " + secondData.current.uvi);
-					// uvColor();
+					uvColor();
 					humidityEl.text("Humidity: " + secondData.current.humidity);
 					windSpeedEl.text("Wind Speed: " + secondData.current.wind_speed);
 				});

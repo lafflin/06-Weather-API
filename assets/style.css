@@ -9,6 +9,9 @@
 .red {
 	background-color: red;
 }
+.black-text {
+	color: black;
+}
 
 * {
 	background-color: rgb(65, 65, 65);
